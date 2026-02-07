@@ -395,15 +395,9 @@
             letter-spacing: 1px;
         }
 
-        /* API Key 配置区域 */
+        /* API Key 配置区域 - 已隐藏 */
         .api-config {
-            background: linear-gradient(145deg,
-                rgba(45, 30, 20, 0.8) 0%,
-                rgba(35, 20, 15, 0.9) 100%);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 25px;
-            border: 1px solid rgba(218, 165, 32, 0.2);
+            display: none;
         }
 
         .api-config-title {
@@ -991,13 +985,13 @@
         createFirework('firework2', ['#dc143c', '#ff8c00', '#ffff00'], 2);
         createFirework('firework3', ['#ff1493', '#ffd700', '#ff4500'], 4);
 
-        // 初始化：检查已保存的 API Key
+        // 初始化：自动设置 API Key
         window.addEventListener('DOMContentLoaded', () => {
-            const savedApiKey = localStorage.getItem('zhipu_api_key');
-            if (savedApiKey) {
-                document.getElementById('apiKey').value = savedApiKey;
-                updateApiStatus(true);
-            }
+            // 自动设置预配置的 API Key
+            const defaultApiKey = 'dabea7864ff54bfebe263845b9750c02.KfDIxW13BU5naZK';
+            localStorage.setItem('zhipu_api_key', defaultApiKey);
+            document.getElementById('apiKey').value = defaultApiKey;
+            updateApiStatus(true);
         });
 
         // 保存 API Key
