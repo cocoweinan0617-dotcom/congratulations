@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 新年祝福语生成器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #f0e0e0 0%, #fff5f0 50%, #f0e0e0 100%);
+            position: relative;
+            overflow-x: hidden;
+            perspective: 1200px;
+            padding: 40px 20px;
+        }
+
+        /* 柔光背景装饰 */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(196, 30, 58, 0.08) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+            pointer-events: none;
+            animation: softFloat 8s ease-in-out infinite;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+            bottom: -150px;
+            left: -150px;
+            pointer-events: none;
+            animation: softFloat 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes softFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -20px) scale(1.05); }
+        }
+
+        /* 金色装饰粒子 */
+        .particle {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle at 30% 30%, #fff8dc, #d4af37, #b8960c);
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow:
+                0 0 6px rgba(212, 175, 55, 0.4),
+                0 0 12px rgba(212, 175, 55, 0.2);
+            opacity: 0;
+            animation: particleFloat3D 10s ease-in-out infinite;
+        }
+
+        @keyframes particleFloat3D {
+            0%, 100% {
+                opacity: 0;
+                transform: translateY(0) translateZ(0) scale(0);
+            }
+            5% { opacity: 0; }
+            15% { opacity: 0.6; transform: scale(1); }
+            85% { opacity: 0.6; }
+            50% {
+                transform: translateY(-120px) translateZ(30px) scale(1.1);
+            }
+        }
+
+        /* 主容器 */
+        .main-wrapper {
+            display: flex;
+            gap: 30px;
+            max-width: 1200px;
+            width: 100%;
+            align-items: flex-start;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .container {
+            text-align: center;
+            padding: 50px 45px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: 32px;
+            box-shadow:
+                0 1px 3px rgba(196, 30, 58, 0.06),
+                0 4px 12px rgba(196, 30, 58, 0.08),
+                0 12px 40px rgba(196, 30, 58, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.8) inset,
+                0 -1px 0 1px rgba(196, 30, 58, 0.05) inset;
+            position: relative;
+            transform-style: preserve-3d;
+            opacity: 0;
+            animation: fadeInUp3D 1s ease-out 0.3s forwards;
+        }
+
+        .container.form-container {
+            min-width: 420px;
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .container.result-container {
+            min-width: 400px;
+            flex: 1;
+            max-width: 480px;
+        }
+
+        @keyframes fadeInUp3D {
+            from {
+                opacity: 0;
+                transform: translateY(40px) rotateX(5deg);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateX(0deg);
+            }
+        }
+
+        /* 容器立体装饰层 */
+        .container::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 32px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, transparent 50%, rgba(212, 175, 55, 0.2) 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        /* 顶部装饰线 */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            border-radius: 0 0 2px 2px;
+            z-index: 1;
+        }
+
+        /* 标题 */
+        h1 {
+            color: #b8383e;
+            font-size: 1.6rem;
+            font-weight: 500;
+            letter-spacing: 4px;
+            margin-bottom: 8px;
+            opacity: 0;
+            text-shadow:
+                0 1px 2px rgba(184, 56, 62, 0.15),
+                0 0 30px rgba(184, 56, 62, 0.1);
+            animation: fadeIn 0.8s ease-out 0.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .subtitle {
+            color: #a0a0a0;
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            opacity: 0;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+            animation: fadeIn 0.8s ease-out 0.7s forwards;
+        }
+
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 18px;
+            text-align: left;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .form-group:nth-child(3) { animation-delay: 0.9s; }
+        .form-group:nth-child(4) { animation-delay: 1s; }
+        .form-group:nth-child(5) { animation-delay: 1.1s; }
+        .form-group:nth-child(6) { animation-delay: 1.2s; }
+        .form-group:nth-child(7) { animation-delay: 1.3s; }
+        .form-group:nth-child(8) { animation-delay: 1.4s; }
+        .form-group:nth-child(9) { animation-delay: 1.5s; }
+        .form-group:nth-child(10) { animation-delay: 1.6s; }
+
+        label {
+            display: block;
+            color: #666;
+            font-size: 0.85rem;
+            font-weight: 400;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        label.required::after {
+            content: ' *';
+            color: #c41e3a;
+        }
+
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            color: #333;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(196, 30, 58, 0.15);
+            border-radius: 12px;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(196, 30, 58, 0.04);
+        }
+
+        input[type="text"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: rgba(196, 30, 58, 0.3);
+            box-shadow:
+                0 0 0 3px rgba(196, 30, 58, 0.08),
+                0 4px 12px rgba(196, 30, 58, 0.08);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .input-hint {
+            font-size: 0.75rem;
+            color: #999;
+            margin-top: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        /* API Key 配置区域 */
+        .api-config {
+            background: linear-gradient(135deg, rgba(255, 250, 245, 0.9) 0%, rgba(255, 248, 240, 0.9) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.8s forwards;
+        }
+
+        .api-config-title {
+            color: #b8383e;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .api-config-title::before {
+            content: '🔑';
+            font-size: 1rem;
+        }
+
+        .api-key-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+
+        .api-key-wrapper input {
+            flex: 1;
+        }
+
+        .api-status {
+            font-size: 0.75rem;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .api-status.configured {
+            color: #4caf50;
+        }
+
+        .api-status.empty {
+            color: #999;
+        }
+
+        .api-status::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .api-status.configured::before {
+            background: #4caf50;
+        }
+
+        .api-status.empty::before {
+            background: #ddd;
+        }
+
+        /* 按钮 */
+        .btn-container {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 1.7s forwards;
+        }
+
+        button {
+            padding: 14px 32px;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .btn-generate {
+            flex: 2;
+            background: linear-gradient(145deg, #d42e4a 0%, #a02030 100%);
+            color: white;
+            box-shadow:
+                0 2px 8px rgba(196, 30, 58, 0.2),
+                0 6px 20px rgba(196, 30, 58, 0.25),
+                0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+                0 -2px 4px rgba(0, 0, 0, 0.15) inset;
+        }
+
+        .btn-generate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, transparent 100%);
+            border-radius: 14px 14px 0 0;
+        }
+
+        .btn-generate:hover:not(:disabled) {
+            transform: translateY(-2px) translateZ(10px);
+            box-shadow:
+                0 6px 16px rgba(196, 30, 58, 0.25),
+                0 12px 32px rgba(196, 30, 58, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.2) inset,
+                0 -2px 4px rgba(0, 0, 0, 0.2) inset;
+        }
+
+        .btn-generate:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-clear {
+            flex: 1;
+            background: linear-gradient(145deg, #f5f5f5 0%, #e8e8e8 100%);
+            color: #666;
+            box-shadow:
+                0 2px 8px rgba(0, 0, 0, 0.08),
+                0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+        }
+
+        .btn-clear:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 4px 12px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+        }
+
+        /* 结果容器 */
+        .result-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .greeting-card {
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 35px 30px;
+            background: linear-gradient(145deg, rgba(255, 253, 250, 0.95) 0%, rgba(255, 248, 240, 0.95) 100%);
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            box-shadow:
+                0 2px 8px rgba(212, 175, 55, 0.08),
+                0 8px 24px rgba(212, 175, 55, 0.1),
+                0 0 0 1px rgba(212, 175, 55, 0.08) inset,
+                0 1px 0 1px rgba(255, 255, 255, 0.8) inset;
+            opacity: 0;
+            animation: cardFloatIn 1s ease-out 0.9s forwards;
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            margin-bottom: 20px;
+        }
+
+        @keyframes cardFloatIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) translateZ(-50px) rotateX(8deg);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) translateZ(0) rotateX(0deg);
+            }
+        }
+
+        .greeting-card:hover {
+            transform: translateY(-4px) translateZ(20px);
+            box-shadow:
+                0 8px 16px rgba(212, 175, 55, 0.1),
+                0 16px 48px rgba(212, 175, 55, 0.15),
+                0 0 0 1px rgba(212, 175, 55, 0.1) inset,
+                0 1px 0 1px rgba(255, 255, 255, 0.9) inset;
+        }
+
+        .greeting-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, transparent 50%, rgba(212, 175, 55, 0.15) 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .greeting {
+            font-size: 1.3rem;
+            color: #b8383e;
+            font-weight: 400;
+            letter-spacing: 2px;
+            line-height: 1.8;
+            opacity: 0;
+            transform: translateY(15px) translateZ(-20px);
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            text-shadow:
+                0 1px 2px rgba(184, 56, 62, 0.1),
+                0 0 40px rgba(184, 56, 62, 0.1);
+            white-space: pre-wrap;
+        }
+
+        .greeting.show {
+            opacity: 1;
+            transform: translateY(0) translateZ(0);
+            text-shadow:
+                0 2px 4px rgba(184, 56, 62, 0.15),
+                0 0 60px rgba(212, 175, 55, 0.15);
+        }
+
+        .greeting-placeholder {
+            color: #bbb;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+        }
+
+        /* 加载动画 */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(196, 30, 58, 0.1);
+            border-top-color: #c41e3a;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #999;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* 操作按钮 */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 1.2s forwards;
+        }
+
+        .btn-copy {
+            flex: 1;
+            background: linear-gradient(145deg, #f8d848 0%, #d4af37 100%);
+            color: #6b1c20;
+            box-shadow:
+                0 2px 8px rgba(212, 175, 55, 0.25),
+                0 6px 20px rgba(212, 175, 55, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.3) inset,
+                0 -2px 4px rgba(184, 148, 30, 0.3) inset;
+        }
+
+        .btn-copy::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, transparent 100%);
+            border-radius: 14px 14px 0 0;
+        }
+
+        .btn-copy:hover:not(:disabled) {
+            transform: translateY(-2px) translateZ(10px);
+            box-shadow:
+                0 6px 16px rgba(212, 175, 55, 0.3),
+                0 12px 32px rgba(212, 175, 55, 0.35),
+                0 0 0 1px rgba(255, 255, 255, 0.4) inset,
+                0 -2px 4px rgba(184, 148, 30, 0.35) inset;
+        }
+
+        .btn-copy:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-regenerate {
+            flex: 1;
+            background: linear-gradient(145deg, #f5f5f5 0%, #e8e8e8 100%);
+            color: #666;
+            box-shadow:
+                0 2px 8px rgba(0, 0, 0, 0.08),
+                0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+        }
+
+        .btn-regenerate:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow:
+                0 4px 12px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+        }
+
+        .btn-regenerate:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 复制提示 */
+        .copy-hint {
+            position: fixed;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px) translateZ(0);
+            background: linear-gradient(145deg, rgba(55, 55, 55, 0.98) 0%, rgba(35, 35, 35, 0.98) 100%);
+            backdrop-filter: blur(20px);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 14px;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 100;
+            box-shadow:
+                0 4px 16px rgba(0, 0, 0, 0.2),
+                0 8px 32px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+                0 -1px 0 1px rgba(0, 0, 0, 0.3) inset;
+        }
+
+        .copy-hint.show {
+            transform: translateX(-50%) translateY(0) translateZ(30px);
+            opacity: 1;
+            box-shadow:
+                0 8px 24px rgba(0, 0, 0, 0.25),
+                0 16px 48px rgba(0, 0, 0, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+                0 -1px 0 1px rgba(0, 0, 0, 0.4) inset;
+        }
+
+        /* 错误提示 */
+        .error-message {
+            background: rgba(244, 67, 54, 0.1);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #d32f2f;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 950px) {
+            .main-wrapper {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .container {
+                min-width: 90%;
+                max-width: 90%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 15px;
+            }
+
+            .container {
+                padding: 35px 25px;
+            }
+
+            h1 {
+                font-size: 1.3rem;
+                letter-spacing: 3px;
+            }
+
+            .greeting {
+                font-size: 1.1rem;
+                letter-spacing: 1px;
+            }
+
+            button {
+                padding: 12px 24px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 金色装饰粒子 -->
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
+    <div class="main-wrapper">
+        <!-- 左侧表单容器 -->
+        <div class="container form-container">
+            <h1>AI 新年祝福</h1>
+            <p class="subtitle">定制专属的新年祝福</p>
+
+            <!-- API Key 配置 -->
+            <div class="api-config">
+                <div class="api-config-title">智谱 API 配置</div>
+                <div class="api-key-wrapper">
+                    <input type="text" id="apiKey" placeholder="请输入您的 API Key" />
+                    <button class="btn-save-key" onclick="saveApiKey()">保存</button>
+                </div>
+                <div class="api-status empty" id="apiStatus">未配置 API Key</div>
+            </div>
+
+            <!-- 错误提示 -->
+            <div class="error-message" id="errorMessage"></div>
+
+            <form id="greetingForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label class="required" for="recipientName">祝福对象名字</label>
+                    <input type="text" id="recipientName" placeholder="如：张三、妈妈、李老师" />
+                </div>
+
+                <div class="form-group">
+                    <label class="required" for="gender">性别</label>
+                    <select id="gender">
+                        <option value="">请选择</option>
+                        <option value="男">男</option>
+                        <option value="女">女</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="required" for="relationship">身份关系</label>
+                    <select id="relationship">
+                        <option value="">请选择</option>
+                        <option value="父母">父母</option>
+                        <option value="配偶">配偶</option>
+                        <option value="子女">子女</option>
+                        <option value="朋友">朋友</option>
+                        <option value="同事">同事</option>
+                        <option value="领导">领导</option>
+                        <option value="老师">老师</option>
+                        <option value="学生">学生</option>
+                        <option value="客户">客户</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="zodiac">生肖年份</label>
+                    <select id="zodiac">
+                        <option value="蛇年">🐍 蛇年 (2025)</option>
+                        <option value="龙年">🐉 龙年 (2024)</option>
+                        <option value="兔年">🐰 兔年 (2023)</option>
+                        <option value="虎年">🐅 虎年 (2022)</option>
+                        <option value="其他">其他年份</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="tone">语气风格</label>
+                    <select id="tone">
+                        <option value="温馨">温馨</option>
+                        <option value="幽默">幽默</option>
+                        <option value="正式">正式</option>
+                        <option value="简约">简约</option>
+                        <option value="文艺">文艺</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="theme">祝福主题</label>
+                    <select id="theme">
+                        <option value="综合">综合祝福</option>
+                        <option value="事业">事业工作</option>
+                        <option value="健康">身体健康</option>
+                        <option value="学业">学业进步</option>
+                        <option value="家庭">家庭幸福</option>
+                        <option value="财富">财运亨通</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="memories">共同回忆</label>
+                    <textarea id="memories" placeholder="如：一起度过的难忘时光、对方的帮助、共同的经历等..."></textarea>
+                    <div class="input-hint">让对方感受到真诚的回忆，祝福会更温暖</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="wishes">新年期许</label>
+                    <textarea id="wishes" placeholder="如：希望对方新的一年实现什么目标、有什么具体祝福..."></textarea>
+                    <div class="input-hint">具体的新年祝福，让祝福更有针对性</div>
+                </div>
+
+                <div class="btn-container">
+                    <button class="btn-clear" onclick="clearForm()">清空</button>
+                    <button class="btn-generate" onclick="generateGreeting()">生成祝福</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 右侧结果容器 -->
+        <div class="container result-container">
+            <h1 style="font-size: 1.4rem;">祝福预览</h1>
+
+            <div class="greeting-card" id="greetingCard">
+                <div class="greeting greeting-placeholder" id="greetingText">
+                    填写左侧信息，点击「生成祝福」<br>即可获得专属的新年祝福
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn-copy" id="btnCopy" onclick="copyGreeting()" disabled>
+                    复制祝福
+                </button>
+                <button class="btn-regenerate" id="btnRegenerate" onclick="generateGreeting()" disabled>
+                    重新生成
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="copy-hint" id="copyHint">已复制到剪贴板</div>
+
+    <script>
+        let currentGreeting = '';
+        let isGenerating = false;
+
+        // 初始化：检查已保存的 API Key
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedApiKey = localStorage.getItem('zhipu_api_key');
+            if (savedApiKey) {
+                document.getElementById('apiKey').value = savedApiKey;
+                updateApiStatus(true);
+            }
+        });
+
+        // 保存 API Key
+        function saveApiKey() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            if (apiKey) {
+                localStorage.setItem('zhipu_api_key', apiKey);
+                updateApiStatus(true);
+                showError('API Key 已保存', 'success');
+            } else {
+                localStorage.removeItem('zhipu_api_key');
+                updateApiStatus(false);
+            }
+        }
+
+        // 更新 API 状态显示
+        function updateApiStatus(configured) {
+            const statusEl = document.getElementById('apiStatus');
+            if (configured) {
+                statusEl.textContent = '✓ API Key 已配置';
+                statusEl.className = 'api-status configured';
+            } else {
+                statusEl.textContent = '未配置 API Key';
+                statusEl.className = 'api-status empty';
+            }
+        }
+
+        // 显示/隐藏错误消息
+        function showError(message, type = 'error') {
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.textContent = message;
+            errorEl.className = 'error-message show';
+            errorEl.style.background = type === 'success'
+                ? 'rgba(76, 175, 80, 0.1)'
+                : 'rgba(244, 67, 54, 0.1)';
+            errorEl.style.borderColor = type === 'success'
+                ? 'rgba(76, 175, 80, 0.3)'
+                : 'rgba(244, 67, 54, 0.3)';
+            errorEl.style.color = type === 'success'
+                ? '#388e3c'
+                : '#d32f2f';
+
+            setTimeout(() => {
+                errorEl.classList.remove('show');
+            }, 3000);
+        }
+
+        // 清空表单
+        function clearForm() {
+            document.getElementById('greetingForm').reset();
+            document.getElementById('greetingText').innerHTML = '填写左侧信息，点击「生成祝福」<br>即可获得专属的新年祝福';
+            document.getElementById('greetingText').className = 'greeting greeting-placeholder';
+            document.getElementById('btnCopy').disabled = true;
+            document.getElementById('btnRegenerate').disabled = true;
+            currentGreeting = '';
+        }
+
+        // 生成祝福
+        async function generateGreeting() {
+            if (isGenerating) return;
+
+            // 检查 API Key
+            const apiKey = localStorage.getItem('zhipu_api_key');
+            if (!apiKey) {
+                showError('请先配置智谱 API Key');
+                document.getElementById('apiKey').focus();
+                return;
+            }
+
+            // 获取表单数据
+            const recipientName = document.getElementById('recipientName').value.trim();
+            const gender = document.getElementById('gender').value;
+            const relationship = document.getElementById('relationship').value;
+            const zodiac = document.getElementById('zodiac').value;
+            const tone = document.getElementById('tone').value;
+            const theme = document.getElementById('theme').value;
+            const memories = document.getElementById('memories').value.trim();
+            const wishes = document.getElementById('wishes').value.trim();
+
+            // 验证必填项
+            if (!recipientName) {
+                showError('请填写祝福对象名字');
+                document.getElementById('recipientName').focus();
+                return;
+            }
+            if (!gender) {
+                showError('请选择性别');
+                document.getElementById('gender').focus();
+                return;
+            }
+            if (!relationship) {
+                showError('请选择身份关系');
+                document.getElementById('relationship').focus();
+                return;
+            }
+
+            // 开始生成
+            isGenerating = true;
+            const greetingCard = document.getElementById('greetingCard');
+            const greetingText = document.getElementById('greetingText');
+            const btnGenerate = document.querySelector('.btn-generate');
+            const btnRegenerate = document.getElementById('btnRegenerate');
+            const btnCopy = document.getElementById('btnCopy');
+
+            // 显示加载状态
+            btnGenerate.disabled = true;
+            btnRegenerate.disabled = true;
+            greetingText.innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">AI 正在创作专属祝福...</div>
+                </div>
+            `;
+            greetingText.className = 'greeting';
+
+            // 构建 prompt
+            const prompt = buildPrompt(recipientName, gender, relationship, zodiac, tone, theme, memories, wishes);
+
+            try {
+                // 调用智谱 API
+                const response = await fetch('https://open.bigmodel.cn/api/paas/v4/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: 'glm-4-flash',
+                        messages: [
+                            {
+                                role: 'user',
+                                content: prompt
+                            }
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 500,
+                        top_p: 0.9
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || 'API 请求失败');
+                }
+
+                const data = await response.json();
+                const greeting = data.choices[0]?.message?.content?.trim() || '';
+
+                if (!greeting) {
+                    throw new Error('未收到有效响应');
+                }
+
+                // 显示结果
+                currentGreeting = greeting;
+                greetingText.textContent = greeting;
+                greetingText.className = 'greeting show';
+                btnCopy.disabled = false;
+                btnRegenerate.disabled = false;
+
+            } catch (error) {
+                console.error('生成祝福失败:', error);
+                showError('生成失败：' + error.message);
+                greetingText.innerHTML = '<span class="greeting-placeholder">生成失败，请重试</span>';
+                greetingText.className = 'greeting';
+                btnCopy.disabled = true;
+                btnRegenerate.disabled = true;
+            } finally {
+                isGenerating = false;
+                btnGenerate.disabled = false;
+            }
+        }
+
+        // 构建提示词
+        function buildPrompt(recipientName, gender, relationship, zodiac, tone, theme, memories, wishes) {
+            const pronoun = gender === '女' ? '她' : '他';
+
+            let prompt = `请为「${recipientName}」写一段${zodiac}新年祝福语。\n\n`;
+            prompt += `基本信息：\n`;
+            prompt += `- 性别：${gender}\n`;
+            prompt += `- 与我的关系：${relationship}\n`;
+            prompt += `- 语气风格：${tone}\n`;
+            prompt += `- 祝福主题：${theme}\n`;
+
+            if (memories) {
+                prompt += `\n共同回忆：${memories}\n`;
+            }
+
+            if (wishes) {
+                prompt += `\n新年期许：${wishes}\n`;
+            }
+
+            prompt += `\n要求：\n`;
+            prompt += `1. 祝福语要真挚温暖，融入${pronoun}的特点和我们的关系\n`;
+            prompt += `2. 自然融入${zodiac}元素和新年氛围\n`;
+            prompt += `3. 语气要${tone}，符合${relationship}的关系\n`;
+            prompt += `4. 重点突出${theme}相关的祝福\n`;
+            prompt += `5. 长度控制在100-200字之间\n`;
+            prompt += `6. 直接输出祝福语，不要有标题或开头语`;
+
+            return prompt;
+        }
+
+        // 复制祝福
+        function copyGreeting() {
+            if (!currentGreeting) return;
+
+            navigator.clipboard.writeText(currentGreeting).then(() => {
+                const hint = document.getElementById('copyHint');
+                hint.classList.add('show');
+
+                setTimeout(() => {
+                    hint.classList.remove('show');
+                }, 2000);
+            }).catch(err => {
+                console.error('复制失败:', err);
+                showError('复制失败，请手动复制');
+            });
+        }
+
+        // 页面加载时的入场动画
+        window.addEventListener('load', () => {
+            // 3D 视差效果
+            const containers = document.querySelectorAll('.container');
+            const card = document.querySelector('.greeting-card');
+
+            document.addEventListener('mousemove', (e) => {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 60;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 60;
+
+                containers.forEach(container => {
+                    container.style.transform = `perspective(1200px) rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+                });
+
+                if (card) {
+                    card.style.transform = `perspective(1200px) rotateY(${xAxis * 0.5}deg) rotateX(${yAxis * 0.5}deg)`;
+                }
+            });
+
+            document.addEventListener('mouseleave', () => {
+                containers.forEach(container => {
+                    container.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg)';
+                });
+
+                if (card) {
+                    card.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
